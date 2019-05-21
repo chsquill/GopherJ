@@ -2,6 +2,10 @@
 
 GopherJ idea is around generating boilerplate code for repetive tasks. It is a code generator creating Java source files using structured input such as JSON, XML as well as other Java source files as input. 
 
+# Running GopherJ
+
+Execute Main.java  
+
 # Purpose
 
 GopherJ helps avoid the tedious task of creating boilerplate code manually. For example, programming against third party API’s has become common and it can be tedious to create the Java code structures that will map to the API’s output. The goal is to identify the structure of the input (JSON, XML) and parse it into a compilable Java code structure maintaining the inputs fields names, types and arrays. 
