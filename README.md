@@ -6,7 +6,7 @@ GopherJ idea is around generating boilerplate code for repetive tasks. It is a c
 
 GopherJ helps avoid the tedious task of creating boilerplate code manually. For example, programming against third party API’s has become common and it can be tedious to create the Java code structures that will map to the API’s output. The goal is to identify the structure of the input (JSON, XML) and parse it into a compilable Java code structure maintaining the inputs fields names, types and arrays. 
 
-A second use case is to generate JUnit test boilerplate code over an existing codebase Java services. In this scenario it would find all public methods and create @Test methods per-public method.  
+A second use case is to generate JUnit test boilerplate code over an existing codebase of Java services. In this scenario it would find all public methods and create @Test methods per-public method.  
 
 # Dependencies
 
