@@ -1,7 +1,11 @@
 package cs622.document;
 
+/**
+ * XmlDocument is used to parse an XML document in to Components.
+ */
 public class XmlDocument extends Document {
 
+	/** Wsdl of the XML if there is one */
 	private String wsdlUrl;
 
 	public XmlDocument(String wsdlUrl) {

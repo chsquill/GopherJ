@@ -1,17 +1,22 @@
 package cs622;
 
+import static org.junit.Assert.assertTrue;
+
 import org.junit.jupiter.api.Test;
 
 import cs622.document.Document;
 import cs622.document.JsonDocument;
 import cs622.generator.GopherJGenerator;
 
+/*
+ * Test for the GopherJGenerator.
+ */
 class GopherJGeneratorTest {
 
 	@Test
-	void test() {
+	void testPackageStatementCreated() {
 
-		GopherJGenerator gen = new GopherJGenerator();
+		GopherJGenerator generator = new GopherJGenerator();
 
 		Document doc = new JsonDocument();
 
@@ -21,7 +26,10 @@ class GopherJGeneratorTest {
 
 		doc.parse(json);
 
-		gen.generate(doc);
+		String output = generator.generate(doc);
+
+		// check if first line of generated file starts with 'package'
+		assertTrue(output.startsWith("package"));
 	}
 
 }

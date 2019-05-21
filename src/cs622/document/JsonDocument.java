@@ -11,8 +11,12 @@ import cs622.component.IntegerComponent;
 import cs622.component.LongComponent;
 import cs622.component.StringComponent;
 
+/**
+ * JsonDocument is used to parse a Json document in to Components.
+ */
 public class JsonDocument extends Document {
 
+	/** Wadl of the Json if there is one */
 	private String wadlUrl;
 
 	public JsonDocument() {
@@ -26,9 +30,9 @@ public class JsonDocument extends Document {
 	@Override
 	public void parse(String json) {
 
-		ArrayList<Component> comps = new ArrayList<>();
+		// parses the incoming json string into a Component[]
 
-		// System.out.println(json);
+		ArrayList<Component> comps = new ArrayList<>();
 
 		try {
 
@@ -39,8 +43,6 @@ public class JsonDocument extends Document {
 			for (String string : names) {
 
 				Object ob = o.get(string);
-
-				// System.out.println(ob.getClass());
 
 				switch (ob.getClass().getTypeName()) {
 
@@ -62,15 +64,14 @@ public class JsonDocument extends Document {
 				default:
 					break;
 				}
-
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+		// set the components that will describe the parsed json
 		setComponents(comps.toArray(new Component[comps.size()]));
-
 	}
 
 	public String getWadlUrl() {

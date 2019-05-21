@@ -12,12 +12,24 @@ import cs622.component.Component;
 import cs622.document.JsonDocument;
 import cs622.document.XmlDocument;
 
+/**
+ * Generator that creates the Java source file. It will base the generation on
+ * the Generatable's components passed into generate().
+ * 
+ */
 public class GopherJGenerator {
 
 	/**
 	 * Builds a Java class file from the provided components.
 	 */
-	public void generate(Generatable generatable) {
+	public String generate(Generatable generatable) {
+
+		// an example of down-casting - not sure needed here
+		if (generatable instanceof JsonDocument) {
+			System.out.println("WADL file : " + ((JsonDocument) generatable).getWadlUrl());
+		} else if (generatable instanceof XmlDocument) {
+			System.out.println("WSDL file : " + ((XmlDocument) generatable).getWsdlUrl());
+		}
 
 		// generate class
 		TypeSpec.Builder classBuilder = TypeSpec.classBuilder("GopherJDto").addModifiers(Modifier.PUBLIC)
@@ -44,17 +56,16 @@ public class GopherJGenerator {
 			classBuilder.addMethod(setMethod);
 		}
 
+		// generate file
 		TypeSpec tyepSpec = classBuilder.build();
 
 		JavaFile javaFile = JavaFile.builder("gopherj", tyepSpec).build();
 
-		System.out.println(javaFile.toString());
+		String output = javaFile.toString();
 
-		if (generatable instanceof JsonDocument) {
-			System.out.println("WADL file : " + ((JsonDocument) generatable).getWadlUrl());
-		} else if (generatable instanceof XmlDocument) {
-			System.out.println("WSDL file : " + ((XmlDocument) generatable).getWsdlUrl());
-		}
+		System.out.println(output);
+
+		return output;
 
 	}
 
