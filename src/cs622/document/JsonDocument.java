@@ -2,6 +2,7 @@ package cs622.document;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import cs622.component.ArrayComponent;
@@ -10,6 +11,8 @@ import cs622.component.DoubleComponent;
 import cs622.component.IntegerComponent;
 import cs622.component.LongComponent;
 import cs622.component.StringComponent;
+import cs622.document.exception.DocumentParseException;
+import cs622.document.exception.JsonParseException;
 
 /**
  * JsonDocument is used to parse a Json document in to Components.
@@ -66,8 +69,10 @@ public class JsonDocument extends Document {
 				}
 			}
 
+		} catch (JSONException e) {
+			throw new JsonParseException(e.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new DocumentParseException(e.getMessage());
 		}
 
 		// set the components that will describe the parsed json

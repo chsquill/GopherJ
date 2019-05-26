@@ -2,6 +2,7 @@ package cs622;
 
 import cs622.document.Document;
 import cs622.document.JsonDocument;
+import cs622.document.exception.JsonParseException;
 import cs622.generator.GopherJGenerator;
 
 public class Main {
@@ -10,13 +11,17 @@ public class Main {
 
 		GopherJGenerator gen = new GopherJGenerator();
 
+		// TODO hard coded
+		String json = "{\"firstName\" : \"Charles\"" + "\"lastName\" : \"Squillante\"";
+
 		Document doc = new JsonDocument();
 
-		// TODO hard coded
-		String json = "{\"firstName\" : \"Charles\"," + "\"lastName\" : \"Squillante\"," + "\"age\" : 50,"
-				+ "\"hobbies\" : [\"School\", \"Hiking\", \"Astronomy\"]}";
-
-		doc.parse(json);
+		try {
+			doc.parse(json);
+		} catch (JsonParseException e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 
 		gen.generate(doc);
 	}
