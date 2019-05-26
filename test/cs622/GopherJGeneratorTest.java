@@ -13,7 +13,7 @@ import cs622.generator.GopherJGenerator;
  */
 class GopherJGeneratorTest {
 
-	@Test
+	// @Test
 	void testPackageStatementCreated() {
 
 		GopherJGenerator generator = new GopherJGenerator();
@@ -25,6 +25,23 @@ class GopherJGeneratorTest {
 				+ "\"hobbies\" : [\"School\", \"Hiking\", \"Astronomy\"]}";
 
 		doc.parse(json);
+
+		String output = generator.generate(doc);
+
+		// check if first line of generated file starts with 'package'
+		assertTrue(output.startsWith("package"));
+	}
+
+	@Test
+	void testInputFromAFileAndPackageStatementCreated() {
+
+		GopherJGenerator generator = new GopherJGenerator();
+
+		Document doc = new JsonDocument();
+
+		String filePath = "/home/chuck/git/GopherJ/test/json.input";
+
+		doc.readInputFromFile(filePath);
 
 		String output = generator.generate(doc);
 

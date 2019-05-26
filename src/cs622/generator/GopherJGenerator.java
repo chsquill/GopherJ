@@ -1,5 +1,9 @@
 package cs622.generator;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import javax.lang.model.element.Modifier;
 
 import com.squareup.javapoet.FieldSpec;
@@ -65,8 +69,55 @@ public class GopherJGenerator {
 
 		System.out.println(output);
 
+		writeFileToDisk(output);
+
 		return output;
 
+	}
+
+	/**
+	 * Writes the contents of the provided outputString to disk.
+	 * 
+	 * @param outputString
+	 *            Output string that will be written to disk.
+	 */
+	private void writeFileToDisk(String outputString) {
+
+		// writes the contents of the provided string to a file
+
+		FileWriter writer = null;
+
+		try {
+
+			File ouputFile = new File("GopherJDto.java");
+
+			// create a new file
+			boolean created = ouputFile.createNewFile();
+
+			// validate file was created
+			if (!created) {
+				System.out.println(System.out.format("File %s not created", ouputFile.getName()));
+				return;
+			}
+
+			writer = new FileWriter(ouputFile);
+
+			// write the contents of the file to the file
+			writer.write(outputString);
+
+		} catch (IOException e) {
+			System.out.println("Error writing File");
+		} finally {
+
+			// close the writer
+			if (writer != null) {
+				try {
+					writer.close();
+				} catch (Exception e) {
+					System.out.println("Error closing FileWriter");
+				}
+			}
+		}
 	}
 
 	private String generateAccessorName(String name) {
