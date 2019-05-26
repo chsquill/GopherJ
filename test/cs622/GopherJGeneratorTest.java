@@ -13,7 +13,7 @@ import cs622.generator.GopherJGenerator;
  */
 class GopherJGeneratorTest {
 
-	// @Test
+	@Test
 	void testPackageStatementCreated() {
 
 		GopherJGenerator generator = new GopherJGenerator();
@@ -39,7 +39,7 @@ class GopherJGeneratorTest {
 
 		Document doc = new JsonDocument();
 
-		String filePath = "/home/chuck/git/GopherJ/test/json.input";
+		String filePath = "json.input";
 
 		doc.readInputFromFile(filePath);
 

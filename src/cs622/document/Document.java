@@ -2,6 +2,7 @@ package cs622.document;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.Scanner;
 
@@ -55,7 +56,7 @@ public abstract class Document implements Generatable {
 			scanner = new Scanner(file);
 
 			// string buffer for writing the contents of the file
-			StringBuffer fileOutput = new StringBuffer();
+			StringWriter fileOutput = new StringWriter();
 
 			// read the files contents
 			while (scanner.hasNextLine()) {
