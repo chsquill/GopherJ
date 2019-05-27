@@ -16,6 +16,7 @@ import cs622.component.Component;
  */
 public abstract class Document implements Generatable {
 
+	/** Components to be included in the generated Java file. */
 	protected Component[] components;
 
 	/**
@@ -26,13 +27,19 @@ public abstract class Document implements Generatable {
 	 */
 	public abstract void parse(String input);
 
+	/**
+	 * Reads the string input of a document to be parsed.
+	 * 
+	 * @param input
+	 *            Input to be parsed.
+	 */
 	public void readInput(String input) {
 		// parse the input from a String
 		parse(input);
 	}
 
 	/**
-	 * Parse the input from a file path.
+	 * Reads and parses the input from a file path.
 	 * 
 	 * @param filePath
 	 *            Path to a document for processing.

@@ -5,13 +5,19 @@ import cs622.document.JsonDocument;
 import cs622.document.exception.JsonParseException;
 import cs622.generator.GopherJGenerator;
 
+/**
+ * Main class - entry into GopherJ.
+ * 
+ */
 public class Main {
 
 	public static void main(String[] args) {
 
+		// current run of invalid content - JsonParseException expected
+
 		GopherJGenerator gen = new GopherJGenerator();
 
-		// TODO hard coded invalid JSON content
+		// hard coded invalid JSON content
 		String json = "{\"firstName\" : \"Charles\"" + "\"lastName\" : \"Squillante\"";
 
 		Document doc = new JsonDocument();

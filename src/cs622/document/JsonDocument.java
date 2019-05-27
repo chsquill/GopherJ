@@ -30,10 +30,13 @@ public class JsonDocument extends Document {
 		this.setWadlUrl(wadlUrl);
 	}
 
+	/**
+	 * Parses the JSON string into Components
+	 */
 	@Override
 	public void parse(String json) {
 
-		// parses the incoming json string into a Component[]
+		// parses the incoming JSON string into a Components
 
 		ArrayList<Component> comps = new ArrayList<>();
 

@@ -2,7 +2,8 @@ package cs622.component;
 
 /**
  * A Component used to represent an item in a Java source file that will be
- * generated.
+ * generated. This will class will be sub-classed providing the data type to
+ * create.
  * 
  */
 public abstract class Component {
@@ -10,7 +11,8 @@ public abstract class Component {
 	/**
 	 * Gets the class type of the component.
 	 * 
-	 * @return
+	 * @return The type of the Java type to create.
+	 * 
 	 */
 	public abstract Class getType();
 

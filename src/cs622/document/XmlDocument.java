@@ -12,6 +12,9 @@ public class XmlDocument extends Document {
 		this.wsdlUrl = wsdlUrl;
 	}
 
+	/**
+	 * Parses the XML string into Components
+	 */
 	@Override
 	public void parse(String input) {
 

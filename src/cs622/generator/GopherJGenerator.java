@@ -20,8 +20,13 @@ import cs622.document.XmlDocument;
  * Generator that creates the Java source file. It will base the generation on
  * the Generatable's components passed into generate().
  * 
+ * This generator implementation uses JavaPoet API to create the Java file
+ * contents.
+ * 
  */
 public class GopherJGenerator {
+
+	public static final String GENERATED_FILE_NAME = "GopherJDto.java";
 
 	/**
 	 * Builds a Java class file from the provided components.
@@ -67,8 +72,10 @@ public class GopherJGenerator {
 
 		String output = javaFile.toString();
 
+		// prints output to console
 		System.out.println(output);
 
+		// writes the output to a file on disk
 		writeFileToDisk(output);
 
 		return output;
@@ -81,15 +88,18 @@ public class GopherJGenerator {
 	 * @param outputString
 	 *            Output string that will be written to disk.
 	 */
-	private void writeFileToDisk(String outputString) {
-
-		// writes the contents of the provided string to a file
+	public void writeFileToDisk(String outputString) {
 
 		FileWriter writer = null;
 
 		try {
 
-			File ouputFile = new File("GopherJDto.java");
+			File ouputFile = new File(GENERATED_FILE_NAME);
+
+			// delete old file if it exists
+			if (ouputFile.exists()) {
+				ouputFile.delete();
+			}
 
 			// create a new file
 			boolean created = ouputFile.createNewFile();
@@ -120,6 +130,7 @@ public class GopherJGenerator {
 		}
 	}
 
+	/* Generates a camel-case accessor method name. */
 	private String generateAccessorName(String name) {
 		return name.substring(0, 1).toUpperCase() + name.substring(1);
 	}
