@@ -1,22 +1,24 @@
 package cs622;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
 import cs622.document.Document;
 import cs622.document.JsonDocument;
-import cs622.document.exception.JsonParseException;
 import cs622.generator.GopherJGenerator;
 
 /*
- * Test for the GopherJGenerator.
+ * Test for the GopherJGenerator class.
  */
 class GopherJGeneratorTest {
 
 	@Test
 	void packageStatementCreatedTest() {
+
+		// validate that that a string representing a java file was created
 
 		GopherJGenerator generator = new GopherJGenerator();
 
@@ -35,22 +37,10 @@ class GopherJGeneratorTest {
 	}
 
 	@Test
-	void invalidJsonParseFailureTest() {
-
-		// error - missing comma after first name
-		String json = "{\"firstName\" : \"Charles\"" + "\"lastName\" : \"Squillante\"}";
-
-		Document doc = new JsonDocument();
-
-		// validate JsonParseException is thrown
-		assertThrows(JsonParseException.class, () -> {
-			// execute parse using invalid input
-			doc.parse(json);
-		});
-	}
-
-	@Test
 	void inputFromAFileAndPackageStatementCreatedTest() {
+
+		// validate that that a string representing a java file was created from an
+		// input file
 
 		GopherJGenerator generator = new GopherJGenerator();
 
@@ -64,6 +54,12 @@ class GopherJGeneratorTest {
 
 		// check if first line of generated file starts with 'package'
 		assertTrue(output.startsWith("package"));
+
+		File outputFile = new File("GopherJDto.java");
+
+		// validate that the file was written to disk
+		assertTrue(outputFile.exists());
+
 	}
 
 }
