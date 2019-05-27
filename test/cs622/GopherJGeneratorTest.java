@@ -15,14 +15,14 @@ import cs622.generator.GopherJGenerator;
  */
 class GopherJGeneratorTest {
 
-	// @Test
+	@Test
 	void packageStatementCreatedTest() {
 
 		GopherJGenerator generator = new GopherJGenerator();
 
 		Document doc = new JsonDocument();
 
-		// TODO hard coded
+		// valid JSON
 		String json = "{\"firstName\" : \"Charles\"," + "\"lastName\" : \"Squillante\"," + "\"age\" : 50,"
 				+ "\"hobbies\" : [\"School\", \"Hiking\", \"Astronomy\"]}";
 
@@ -34,7 +34,22 @@ class GopherJGeneratorTest {
 		assertTrue(output.startsWith("package"));
 	}
 
-	// @Test
+	@Test
+	void invalidJsonParseFailureTest() {
+
+		// error - missing comma after first name
+		String json = "{\"firstName\" : \"Charles\"" + "\"lastName\" : \"Squillante\"}";
+
+		Document doc = new JsonDocument();
+
+		// validate JsonParseException is thrown
+		assertThrows(JsonParseException.class, () -> {
+			// execute parse using invalid input
+			doc.parse(json);
+		});
+	}
+
+	@Test
 	void inputFromAFileAndPackageStatementCreatedTest() {
 
 		GopherJGenerator generator = new GopherJGenerator();
@@ -49,20 +64,6 @@ class GopherJGeneratorTest {
 
 		// check if first line of generated file starts with 'package'
 		assertTrue(output.startsWith("package"));
-	}
-
-	@Test
-	void invalidJsonStructureTest() {
-
-		// error - missing comma after first name
-		String json = "{\"firstName\" : \"Charles\"" + "\"lastName\" : \"Squillante\"}";
-
-		Document doc = new JsonDocument();
-
-		assertThrows(JsonParseException.class, () -> {
-			// execute parse using invalid input
-			doc.parse(json);
-		});
 	}
 
 }

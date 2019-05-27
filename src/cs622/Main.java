@@ -11,7 +11,7 @@ public class Main {
 
 		GopherJGenerator gen = new GopherJGenerator();
 
-		// TODO hard coded
+		// TODO hard coded invalid JSON content
 		String json = "{\"firstName\" : \"Charles\"" + "\"lastName\" : \"Squillante\"";
 
 		Document doc = new JsonDocument();

@@ -55,7 +55,7 @@ public abstract class Document implements Generatable {
 
 			scanner = new Scanner(file);
 
-			// string buffer for writing the contents of the file
+			// string writer for writing the contents of the file
 			StringWriter fileOutput = new StringWriter();
 
 			// read the files contents
