@@ -6,7 +6,7 @@ package cs622.component;
  * create.
  * 
  */
-public abstract class Component {
+public abstract class Component<T> {
 
 	/**
 	 * Gets the class type of the component.
@@ -14,7 +14,7 @@ public abstract class Component {
 	 * @return The type of the Java type to create.
 	 * 
 	 */
-	public abstract Class getType();
+	public abstract Class<T> getType();
 
 	/** Name of the component */
 	private String name;

@@ -2,15 +2,12 @@ package cs622.document;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cs622.component.ArrayComponent;
 import cs622.component.Component;
-import cs622.component.DoubleComponent;
-import cs622.component.IntegerComponent;
-import cs622.component.LongComponent;
-import cs622.component.StringComponent;
+import cs622.component.GenericComponent;
 import cs622.document.exception.DocumentParseException;
 import cs622.document.exception.JsonParseException;
 
@@ -46,30 +43,16 @@ public class JsonDocument extends Document {
 
 			String[] names = JSONObject.getNames(o);
 
-			for (String string : names) {
+			for (String name : names) {
 
-				Object ob = o.get(string);
+				Object ob = o.get(name);
 
-				switch (ob.getClass().getTypeName()) {
-
-				case "java.lang.String":
-					comps.add(new StringComponent(string));
-					break;
-				case "java.lang.Double":
-					comps.add(new DoubleComponent(string));
-					break;
-				case "java.lang.Integer":
-					comps.add(new IntegerComponent(string));
-					break;
-				case "java.lang.Long":
-					comps.add(new LongComponent(string));
-					break;
-				case "org.json.JSONArray":
-					comps.add(new ArrayComponent(string));
-					break;
-				default:
-					break;
+				// special case for JSONArray, create types as ArrayList
+				if (ob instanceof JSONArray) {
+					ob = new ArrayList<>();
 				}
+
+				comps.add(new GenericComponent<Object>(name, ob));
 			}
 
 		} catch (JSONException e) {
