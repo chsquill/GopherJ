@@ -52,7 +52,8 @@ public class JsonDocument extends Document {
 					ob = new ArrayList<>();
 				}
 
-				comps.add(new GenericComponent<Object>(name, ob));
+				// create generic component
+				comps.add(new GenericComponent<>(name, ob));
 			}
 
 		} catch (JSONException e) {
