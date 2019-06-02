@@ -52,7 +52,7 @@ class GopherJGeneratorTest {
 
 		Document doc = new JsonDocument();
 
-		String filePath = "json.input";
+		String filePath = "input.json";
 
 		doc.readInputFromFile(filePath);
 

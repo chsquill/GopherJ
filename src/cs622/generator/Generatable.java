@@ -1,4 +1,4 @@
-package cs622;
+package cs622.generator;
 
 import cs622.component.Component;
 

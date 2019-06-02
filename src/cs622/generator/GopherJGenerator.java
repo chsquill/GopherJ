@@ -11,7 +11,6 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
-import cs622.Generatable;
 import cs622.component.Component;
 import cs622.document.JsonDocument;
 import cs622.document.XmlDocument;
@@ -114,6 +113,8 @@ public class GopherJGenerator {
 
 			// write the contents of the file to the file
 			writer.write(outputString);
+
+			System.out.format("File generated: %s", ouputFile.getAbsolutePath());
 
 		} catch (IOException e) {
 			System.out.println("Error writing File");

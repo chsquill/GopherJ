@@ -6,8 +6,8 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Scanner;
 
-import cs622.Generatable;
 import cs622.component.Component;
+import cs622.generator.Generatable;
 
 /**
  * Abstract class used to represent a structured document that can be
@@ -55,7 +55,7 @@ public abstract class Document implements Generatable {
 			File file = new File(filePath);
 
 			// validate that the file exists
-			if (!file.exists()) {
+			if (!file.exists() || file.isDirectory()) {
 				System.out.println(System.out.format("File %s doesn't exist. Exiting.", filePath));
 				return;
 			}

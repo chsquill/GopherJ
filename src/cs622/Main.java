@@ -20,8 +20,9 @@ public class Main {
 
 		StringWriter writer = new StringWriter();
 
-		writer.append("Menu\n").append("----\n").append("1. Generate POJO from JSON Input\n")
-				.append("2. Generate POJO from XML Input\n").append("3. Generate JUnit\n").append("4. Exit\n");
+		writer.append("GopherJ Main Menu\n").append("-----------------\n").append("1. Generate Java from JSON Input\n")
+				.append("2. Generate Java from XML Input\n").append("3. Generate JUnit from Java\n")
+				.append("4. Exit\n");
 
 		System.out.println(writer.toString());
 
@@ -31,7 +32,7 @@ public class Main {
 
 		while (running) { // look to prompt the user for values until 'exit'
 
-			System.out.println("\nPlease enter menu item:");
+			System.out.println("\nPlease enter menu item #:");
 
 			Integer option = null;
 
@@ -98,7 +99,7 @@ public class Main {
 
 		File file = new File(path);
 
-		if (!file.exists()) {
+		if (!file.exists() || file.isDirectory()) {
 			throw new FileNotFoundException("File not found.");
 		}
 
