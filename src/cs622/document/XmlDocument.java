@@ -8,6 +8,10 @@ public class XmlDocument extends Document {
 	/** Wsdl of the XML if there is one */
 	private String wsdlUrl;
 
+	public XmlDocument() {
+		this("No WSDL Url specified.");
+	}
+
 	public XmlDocument(String wsdlUrl) {
 		this.wsdlUrl = wsdlUrl;
 	}
@@ -17,9 +21,7 @@ public class XmlDocument extends Document {
 	 */
 	@Override
 	public void parse(String input) {
-
-		// TODO generate components from XML
-
+		System.out.println("XML parser not implemented.");
 	}
 
 	public String getWsdlUrl() {

@@ -35,7 +35,7 @@ public class JsonDocument extends Document {
 
 		// parses the incoming JSON string into a Components
 
-		ArrayList<Component> comps = new ArrayList<>();
+		ArrayList<Component<?>> comps = new ArrayList<>();
 
 		try {
 
