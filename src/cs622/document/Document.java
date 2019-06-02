@@ -1,6 +1,7 @@
 package cs622.document;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
@@ -43,8 +44,9 @@ public abstract class Document implements Generatable {
 	 * 
 	 * @param filePath
 	 *            Path to a document for processing.
+	 * @throws IOException
 	 */
-	public void readInputFromFile(String filePath) {
+	public void readInputFromFile(String filePath) throws IOException {
 
 		// Given the provided file path open it for reading and read it contents.
 
@@ -56,8 +58,7 @@ public abstract class Document implements Generatable {
 
 			// validate that the file exists
 			if (!file.exists() || file.isDirectory()) {
-				System.out.println(System.out.format("File %s doesn't exist. Exiting.", filePath));
-				return;
+				throw new FileNotFoundException(String.format("File %s doesn't exist. Exiting.", filePath));
 			}
 
 			scanner = new Scanner(file);
@@ -74,7 +75,7 @@ public abstract class Document implements Generatable {
 			readInput(fileOutput.toString());
 
 		} catch (IOException e) {
-			System.out.println(System.out.format("Error parsing input from File %s.", filePath));
+			throw e;
 		} finally {
 			// close the scanner when complete
 			if (scanner != null) {

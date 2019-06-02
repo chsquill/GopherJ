@@ -2,6 +2,7 @@ package cs622;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Scanner;
 
@@ -82,6 +83,9 @@ public class Main {
 		} catch (JsonParseException e) {
 			return false;
 		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+			return false;
+		} catch (IOException e) {
 			System.out.println(e.getMessage());
 			return false;
 		}

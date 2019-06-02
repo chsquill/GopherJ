@@ -48,18 +48,25 @@ class GopherJGeneratorTest {
 	@Test
 	void inputFromAFileAndPackageStatementCreatedTest() {
 
-		GopherJGenerator generator = new GopherJGenerator();
+		try {
 
-		Document doc = new JsonDocument();
+			GopherJGenerator generator = new GopherJGenerator();
 
-		String filePath = "input.json";
+			Document doc = new JsonDocument();
 
-		doc.readInputFromFile(filePath);
+			String filePath = "input.json";
 
-		String output = generator.generate(doc);
+			doc.readInputFromFile(filePath);
 
-		// check if first line of generated file starts with 'package'
-		assertTrue(output.startsWith("package"));
+			String output = generator.generate(doc);
+
+			// check if first line of generated file starts with 'package'
+			assertTrue(output.startsWith("package"));
+
+		} catch (Exception e) {
+			fail("Unable to find package statement.");
+		}
+
 	}
 
 	/*

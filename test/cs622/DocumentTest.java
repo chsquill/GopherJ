@@ -2,6 +2,8 @@ package cs622;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.FileNotFoundException;
+
 import org.junit.jupiter.api.Test;
 
 import cs622.document.Document;
@@ -40,6 +42,23 @@ class DocumentTest {
 		assertThrows(JsonParseException.class, () -> {
 			// execute parse using invalid input
 			doc.parse(json);
+		});
+	}
+
+	@Test
+	void noInputFileFoundTest() {
+
+		// validate FileNotFountException if the input file was not found
+
+		// error - bad file name
+		String fileName = "some_bad_file_name.json";
+
+		Document doc = new JsonDocument();
+
+		// validate FileNotFoundException is thrown
+		assertThrows(FileNotFoundException.class, () -> {
+			// execute parse using invalid input
+			doc.readInputFromFile(fileName);
 		});
 	}
 
