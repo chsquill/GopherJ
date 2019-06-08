@@ -5,7 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import cs622.component.Component;
 import cs622.generator.Generatable;
@@ -27,6 +30,15 @@ public abstract class Document implements Generatable {
 	 *            Structured data such as XML or Json
 	 */
 	public abstract void parse(String input);
+
+	/**
+	 * Validates the input document.
+	 * 
+	 * @param input
+	 *            Structured data such as XML or Json
+	 * @return If document is valid.
+	 */
+	public abstract boolean validInput(String input);
 
 	/**
 	 * Reads the string input of a document to be parsed.
@@ -82,6 +94,58 @@ public abstract class Document implements Generatable {
 				scanner.close();
 			}
 		}
+	}
+
+	/**
+	 * Finds all files in a directory of file type '.json'
+	 * 
+	 * @param directory
+	 *            of files
+	 * @return List of file paths for json files.
+	 */
+	public List<String> readValidFiles(String directory) {
+
+		List<String> sortedFilePaths = null;
+
+		try {
+
+			File dir = new File(directory);
+
+			if (!dir.isDirectory()) {
+				return null;
+			}
+
+			sortedFilePaths = Arrays.stream(dir.listFiles(file -> (file.isFile() && file.getName().endsWith(".json"))))
+					.map(file -> file.getAbsolutePath()).sorted().collect(Collectors.toList());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return sortedFilePaths;
+	}
+
+	public List<String> readInputDirectory(String directoryPath) {
+
+		List<String> sortedStrings = null;
+
+		try {
+
+			File dir = new File(directoryPath);
+
+			if (!dir.isDirectory()) {
+				return null;
+			}
+
+			sortedStrings = Arrays.stream(dir.listFiles(file -> file.isFile())).map(file -> file.getAbsolutePath())
+					.sorted().collect(Collectors.toList());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return sortedStrings;
+
 	}
 
 	public void readInput(URL input) {

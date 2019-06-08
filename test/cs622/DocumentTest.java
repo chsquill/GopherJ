@@ -1,8 +1,10 @@
 package cs622;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -60,6 +62,21 @@ class DocumentTest {
 			// execute parse using invalid input
 			doc.readInputFromFile(fileName);
 		});
+	}
+
+	@Test
+	void findValidJsonFromDirectoryTest() {
+
+		// validate FileNotFountException if the input file was not found
+
+		// error - bad file name
+		String dirName = "/home/chuck/git/GopherJ/json_files";
+
+		Document doc = new JsonDocument();
+
+		List<String> sortedValidDocuments = doc.readInputDirectory(dirName);
+
+		assertTrue(sortedValidDocuments.size() > 0);
 	}
 
 }

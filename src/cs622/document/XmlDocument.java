@@ -32,4 +32,10 @@ public class XmlDocument extends Document {
 		this.wsdlUrl = wsdlUrl;
 	}
 
+	@Override
+	public boolean validInput(String input) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

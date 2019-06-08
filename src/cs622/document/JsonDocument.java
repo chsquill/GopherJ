@@ -74,4 +74,10 @@ public class JsonDocument extends Document {
 		this.wadlUrl = wadlUrl;
 	}
 
+	@Override
+	public boolean validInput(String input) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
