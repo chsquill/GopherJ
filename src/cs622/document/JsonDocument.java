@@ -76,8 +76,11 @@ public class JsonDocument extends Document {
 
 	@Override
 	public boolean validInput(String input) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			JSONObject o = new JSONObject(input);
+			return true;
+		} catch (JSONException e) {
+			return false;
+		}
 	}
-
 }

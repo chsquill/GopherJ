@@ -34,7 +34,6 @@ public class XmlDocument extends Document {
 
 	@Override
 	public boolean validInput(String input) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
