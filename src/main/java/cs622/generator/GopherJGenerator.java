@@ -1,8 +1,12 @@
 package cs622.generator;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.lang.model.element.Modifier;
 
@@ -27,6 +31,7 @@ public class GopherJGenerator {
 
 	public static final String GENERATED_FILE_NAME = "GopherJDto.java";
 
+	// flat for writing output to disk
 	private boolean writeOutputToDisk = true;;
 
 	public boolean isWriteOutputToDisk() {
@@ -86,7 +91,7 @@ public class GopherJGenerator {
 
 		// option to write file to disk after generation
 		if (writeOutputToDisk) {
-			// writes the output to a file on disk if option was selected
+			// writes the output to disk
 			writeFileToDisk(output);
 		}
 
@@ -147,5 +152,61 @@ public class GopherJGenerator {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Store the input and the result of the file parsing as a Result file.
+	 * 
+	 * @param jsonInput
+	 * @param javaOutput
+	 * @return File path of Result.
+	 * @throws IOException
+	 */
+	public String storeParseResult(String jsonInput, String javaOutput, String filePath) throws IOException {
+
+		ObjectOutputStream obOutStream = null;
+
+		try {
+
+			File file = new File(filePath);
+
+			obOutStream = new ObjectOutputStream(new FileOutputStream(file));
+
+			obOutStream.writeObject(new Result(jsonInput, javaOutput));
+
+		} finally {
+
+			obOutStream.close();
+		}
+
+		return filePath;
+	}
+
+	/**
+	 * Read and return a Result object file.
+	 * 
+	 * @param file
+	 * @return Result object.
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	public Result readParseResult(String filePath) throws IOException, ClassNotFoundException {
+
+		Result result = null;
+
+		ObjectInputStream obInputStream = null;
+
+		try {
+
+			obInputStream = new ObjectInputStream(new FileInputStream(filePath));
+
+			result = (Result) obInputStream.readObject();
+
+		} finally {
+
+			obInputStream.close();
+		}
+
+		return result;
 	}
 }

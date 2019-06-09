@@ -2,9 +2,13 @@
 
 GopherJ idea is around generating boilerplate code for repetive tasks. It is a code generator creating Java source files using structured input such as JSON, XML as well as other Java source files as input. 
 
-# Running GopherJ
+# Running GopherJ on the command line
 
 Execute Main.java  
+
+# Running GopherJ UI
+
+Execute GopherJUi.java  
 
 # Purpose
 
@@ -20,4 +24,8 @@ JavaPoet - (https://github.com/square/javapoet) - (Maven - https://mvnrepository
   
 Json Organization - (http://json.org) – (Maven - https://mvnrepository.com/artifact/org.json/json)
 
-  Aid in parsing a json string. 
+  Aid in parsing a json string.
+  
+JavaFx - (Provided with Oracles Java 8 JRE/JDK or newer releases. Also availble from https://openjfx.io)
+
+  Used for GopherJ's user interface. 

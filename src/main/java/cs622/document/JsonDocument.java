@@ -74,10 +74,17 @@ public class JsonDocument extends Document {
 		this.wadlUrl = wadlUrl;
 	}
 
+	/**
+	 * Validates JSON input.
+	 * 
+	 * @param JSON
+	 *            input.
+	 * @return Whether input is valid.
+	 */
 	@Override
 	public boolean validInput(String input) {
 		try {
-			JSONObject o = new JSONObject(input);
+			new JSONObject(input);
 			return true;
 		} catch (JSONException e) {
 			return false;
