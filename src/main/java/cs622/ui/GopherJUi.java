@@ -19,9 +19,19 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+/**
+ * GopherJ user interface.
+ * 
+ * Provides basic functionality to select a json file, generate code and print
+ * the output to the UI.
+ * 
+ */
 public class GopherJUi extends Application {
 
+	// generator for code generation
 	private GopherJGenerator generator = new GopherJGenerator();
+
+	// UI components
 	private Button fileButton;
 	private Button copyButton;
 	private Button generateButton;
@@ -29,15 +39,19 @@ public class GopherJUi extends Application {
 	private TextArea textArea;
 	private Label messageLabel;
 
+	// main method
 	public static void main(String[] args) {
 		launch(args);
 	}
 
+	// main UI method
 	public void start(Stage mainStage) {
 
+		// create generator
 		generator = new GopherJGenerator();
 		generator.setWriteOutputToDisk(false);
 
+		// initialize the ui components
 		fileButton = new Button("Choose Json File");
 		copyButton = new Button("Copy");
 		generateButton = new Button("Generate");
@@ -46,10 +60,12 @@ public class GopherJUi extends Application {
 		textArea = new TextArea();
 		messageLabel = new Label();
 
-		// actions
-		fileButton.setOnAction(event -> chooseFile(mainStage));
+		// define actions for buttons
+		fileButton.setOnAction(event -> chooseFileAction(mainStage));
 		copyButton.setOnAction(event -> copyAction());
 		generateButton.setOnAction(event -> generateAction());
+
+		// layout for the UI
 
 		// top layout
 		FlowPane topPane = new FlowPane();
@@ -79,7 +95,8 @@ public class GopherJUi extends Application {
 		mainStage.show();
 	}
 
-	private void chooseFile(Stage mainStage) {
+	// choose a file for parsing
+	private void chooseFileAction(Stage mainStage) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
 		File fileSelected = fileChooser.showOpenDialog(mainStage);
@@ -88,6 +105,7 @@ public class GopherJUi extends Application {
 		textArea.clear();
 	}
 
+	// copy action to copy output to clip-board
 	private void copyAction() {
 		Clipboard clipboard = Clipboard.getSystemClipboard();
 		ClipboardContent content = new ClipboardContent();
@@ -96,6 +114,7 @@ public class GopherJUi extends Application {
 		messageLabel.setText("Copied");
 	}
 
+	// generate code or display error to UI
 	private void generateAction() {
 		try {
 			Document doc = new JsonDocument();
