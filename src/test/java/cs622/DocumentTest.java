@@ -73,7 +73,7 @@ class DocumentTest {
 
 		Document doc = new JsonDocument();
 
-		List<String> sortedValidDocuments = doc.readInputDirectory(dirName);
+		List<String> sortedValidDocuments = doc.readValidFiles(dirName);
 
 		assertTrue(sortedValidDocuments.size() > 0);
 	}

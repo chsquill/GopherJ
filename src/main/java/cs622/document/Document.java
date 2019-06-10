@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -12,6 +15,7 @@ import java.util.stream.Collectors;
 
 import cs622.component.Component;
 import cs622.generator.Generatable;
+import cs622.generator.Result;
 
 /**
  * Abstract class used to represent a structured document that can be
@@ -29,7 +33,7 @@ public abstract class Document implements Generatable {
 	 * @param input
 	 *            Structured data such as XML or Json
 	 */
-	public abstract void parse(String input);
+	public abstract Result parse(String input);
 
 	/**
 	 * Validates the input document.
@@ -46,9 +50,9 @@ public abstract class Document implements Generatable {
 	 * @param input
 	 *            Input to be parsed.
 	 */
-	public void readInput(String input) {
+	public Result readInput(String input) {
 		// parse the input from a String
-		parse(input);
+		return parse(input);
 	}
 
 	/**
@@ -112,40 +116,32 @@ public abstract class Document implements Generatable {
 			File dir = new File(directory);
 
 			if (!dir.isDirectory()) {
-				return null;
+				return sortedFilePaths;
 			}
 
-			sortedFilePaths = Arrays.stream(dir.listFiles(file -> (file.isFile() && file.getName().endsWith(".json"))))
+			// use streams to find a sorted list of valid files, this stream validates
+			// each file against validInput(...)
+			sortedFilePaths = Arrays
+					.stream(dir.listFiles(
+							file -> (file.isFile() && validInput(readContentsFromFile(file.getAbsolutePath())))))
 					.map(file -> file.getAbsolutePath()).sorted().collect(Collectors.toList());
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			// nothing to do here - will return null
 		}
 
 		return sortedFilePaths;
 	}
 
-	public List<String> readInputDirectory(String directoryPath) {
-
-		List<String> sortedStrings = null;
-
+	/*
+	 * Utility method to read contents from file
+	 */
+	private String readContentsFromFile(String filePath) {
 		try {
-
-			File dir = new File(directoryPath);
-
-			if (!dir.isDirectory()) {
-				return null;
-			}
-
-			sortedStrings = Arrays.stream(dir.listFiles(file -> file.isFile())).map(file -> file.getAbsolutePath())
-					.sorted().collect(Collectors.toList());
-
-		} catch (Exception e) {
-			e.printStackTrace();
+			return new String(Files.readAllBytes(Paths.get(filePath)), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			return "not_valid";
 		}
-
-		return sortedStrings;
-
 	}
 
 	public void readInput(URL input) {
