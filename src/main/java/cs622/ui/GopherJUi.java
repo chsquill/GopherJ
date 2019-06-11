@@ -158,8 +158,9 @@ public class GopherJUi extends Application {
 			directoryChooser.setTitle("Save Result Directory");
 			File directorySelected = directoryChooser.showDialog(mainStage);
 			try {
-				String resultPath = generator.storeParseResult(jsonInput, textArea.getText(), String
-						.format("%sgopherj_%s.dat", directorySelected.getAbsolutePath(), System.currentTimeMillis()));
+				String resultPath = generator.storeParseResult(jsonInput, textArea.getText(),
+						String.format("%s%sgopherj_%s.dat", directorySelected.getAbsolutePath(), File.separator,
+								System.currentTimeMillis()));
 				messageLabel.setText("Result saved to: " + resultPath);
 			} catch (IOException e) {
 				messageLabel.setText("Faild to save results");
