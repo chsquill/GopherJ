@@ -67,14 +67,16 @@ class DocumentTest {
 	@Test
 	void findValidJsonFromDirectoryTest() {
 
-		// validate FileNotFountException if the input file was not found
+		// validate a list of json files was returned
 
 		String dirName = "/home/chuck/git/GopherJ/json_files";
 
 		Document doc = new JsonDocument();
 
+		// list of validated and sorted files
 		List<String> sortedValidDocuments = doc.readValidFiles(dirName);
 
+		// assert that more than one was returned
 		assertTrue(sortedValidDocuments.size() > 0);
 	}
 

@@ -170,13 +170,18 @@ public class GopherJGenerator {
 
 			File file = new File(filePath);
 
+			// create stream
 			obOutStream = new ObjectOutputStream(new FileOutputStream(file));
 
+			// write to output stream
 			obOutStream.writeObject(new Result(jsonInput, javaOutput));
 
 		} finally {
 
-			obOutStream.close();
+			// close if output stream was created
+			if (obOutStream != null) {
+				obOutStream.close();
+			}
 		}
 
 		return filePath;
@@ -198,13 +203,17 @@ public class GopherJGenerator {
 
 		try {
 
+			// read object from input stream
 			obInputStream = new ObjectInputStream(new FileInputStream(filePath));
 
+			// cast into result
 			result = (Result) obInputStream.readObject();
 
 		} finally {
-
-			obInputStream.close();
+			// close if input stream was created
+			if (obInputStream != null) {
+				obInputStream.close();
+			}
 		}
 
 		return result;

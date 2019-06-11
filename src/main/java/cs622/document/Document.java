@@ -136,7 +136,7 @@ public abstract class Document implements Generatable {
 	/*
 	 * Utility method to read contents from file
 	 */
-	private String readContentsFromFile(String filePath) {
+	public String readContentsFromFile(String filePath) {
 		try {
 			return new String(Files.readAllBytes(Paths.get(filePath)), StandardCharsets.UTF_8);
 		} catch (IOException e) {
