@@ -1,8 +1,10 @@
 package cs622;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -62,4 +64,39 @@ class DocumentTest {
 		});
 	}
 
+	@Test
+	void findValidJsonFromDirectoryTest() {
+
+		// validate a list of json files was returned
+
+		String dirName = "/home/chuck/git/GopherJ/json_files";
+
+		Document doc = new JsonDocument();
+
+		// list of validated and sorted files
+		List<String> sortedValidDocuments = doc.readValidFiles(dirName);
+
+		// assert that more than one was returned
+		assertTrue(sortedValidDocuments.size() > 0);
+	}
+
+	@Test
+	void validateJsonTest() {
+
+		// validate that a string is a valid JSON document
+
+		// valid JSON
+		String json = "{\"firstName\" : \"Charles\"," + "\"lastName\" : \"Squillante\"}";
+
+		Document doc = new JsonDocument();
+
+		// validate true is returned
+		assertTrue(doc.validInput(json));
+
+		// invalid JSON
+		json = "{\"firstName\" : \"Charles\"" + "\"lastName\" : \"Squillante\"}";
+
+		// validate false is returned
+		assertTrue(!doc.validInput(json));
+	}
 }

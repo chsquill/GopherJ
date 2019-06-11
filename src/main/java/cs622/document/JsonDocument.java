@@ -10,6 +10,7 @@ import cs622.component.Component;
 import cs622.component.GenericComponent;
 import cs622.document.exception.DocumentParseException;
 import cs622.document.exception.JsonParseException;
+import cs622.generator.Result;
 
 /**
  * JsonDocument is used to parse a Json document in to Components.
@@ -31,7 +32,7 @@ public class JsonDocument extends Document {
 	 * Parses the JSON string into Components
 	 */
 	@Override
-	public void parse(String json) {
+	public Result parse(String json) {
 
 		// parses the incoming JSON string into a Components
 
@@ -64,6 +65,8 @@ public class JsonDocument extends Document {
 
 		// set the components that will describe the parsed json
 		setComponents(comps.toArray(new Component[comps.size()]));
+
+		return new Result(json, null);
 	}
 
 	public String getWadlUrl() {
@@ -74,4 +77,20 @@ public class JsonDocument extends Document {
 		this.wadlUrl = wadlUrl;
 	}
 
+	/**
+	 * Validates JSON input.
+	 * 
+	 * @param JSON
+	 *            input.
+	 * @return Whether input is valid.
+	 */
+	@Override
+	public boolean validInput(String input) {
+		try {
+			new JSONObject(input);
+			return true;
+		} catch (JSONException e) {
+			return false;
+		}
+	}
 }

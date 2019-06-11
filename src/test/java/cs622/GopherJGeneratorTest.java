@@ -1,8 +1,8 @@
 package cs622;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import cs622.document.Document;
 import cs622.document.JsonDocument;
 import cs622.generator.GopherJGenerator;
+import cs622.generator.Result;
 
 /*
  * Test for the GopherJGenerator class.
@@ -101,5 +102,38 @@ class GopherJGeneratorTest {
 		} finally {
 			scanner.close();
 		}
+	}
+
+	/*
+	 * Validate that the results of generation (input source, output code) can be
+	 * stored and retrieved in Result object.
+	 */
+	@Test
+	void storeAndReadResultTest() {
+
+		GopherJGenerator generator = new GopherJGenerator();
+
+		try {
+
+			// create temp file
+			File file = File.createTempFile("Result", "dat");
+
+			// store the file receiving the file path back
+			String filePath = generator.storeParseResult("this is json", "this is java", file.getAbsolutePath());
+
+			// validate the file exists
+			assertTrue(new File(filePath).exists());
+
+			// read the result back from disk
+			Result result = generator.readParseResult(filePath);
+
+			// validate the input of the read document has the expected text
+			assertEquals(result.getDocumentInput(), "this is json");
+
+		} catch (Exception e) {
+
+			fail("Error reading/writing Result object to disk.");
+		}
+
 	}
 }

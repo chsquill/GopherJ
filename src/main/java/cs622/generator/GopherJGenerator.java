@@ -1,8 +1,12 @@
 package cs622.generator;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 import javax.lang.model.element.Modifier;
 
@@ -26,6 +30,17 @@ import cs622.document.XmlDocument;
 public class GopherJGenerator {
 
 	public static final String GENERATED_FILE_NAME = "GopherJDto.java";
+
+	// flat for writing output to disk
+	private boolean writeOutputToDisk = true;;
+
+	public boolean isWriteOutputToDisk() {
+		return writeOutputToDisk;
+	}
+
+	public void setWriteOutputToDisk(boolean writeOutputToDisk) {
+		this.writeOutputToDisk = writeOutputToDisk;
+	}
 
 	/**
 	 * Builds a Java class file from the provided components.
@@ -74,11 +89,19 @@ public class GopherJGenerator {
 		// prints output to console
 		System.out.println(output);
 
-		// writes the output to a file on disk
-		writeFileToDisk(output);
+		// option to write file to disk after generation
+		if (writeOutputToDisk) {
+			// writes the output to disk
+			writeFileToDisk(output);
+		}
 
 		return output;
 
+	}
+
+	/* Generates a camel-case accessor method name. */
+	private String generateAccessorName(String name) {
+		return name.substring(0, 1).toUpperCase() + name.substring(1);
 	}
 
 	/**
@@ -131,9 +154,68 @@ public class GopherJGenerator {
 		}
 	}
 
-	/* Generates a camel-case accessor method name. */
-	private String generateAccessorName(String name) {
-		return name.substring(0, 1).toUpperCase() + name.substring(1);
+	/**
+	 * Store the input and the result of the file parsing as a Result file.
+	 * 
+	 * @param jsonInput
+	 * @param javaOutput
+	 * @return File path of Result.
+	 * @throws IOException
+	 */
+	public String storeParseResult(String jsonInput, String javaOutput, String filePath) throws IOException {
+
+		ObjectOutputStream obOutStream = null;
+
+		try {
+
+			File file = new File(filePath);
+
+			// create stream
+			obOutStream = new ObjectOutputStream(new FileOutputStream(file));
+
+			// write to output stream
+			obOutStream.writeObject(new Result(jsonInput, javaOutput));
+
+		} finally {
+
+			// close if output stream was created
+			if (obOutStream != null) {
+				obOutStream.close();
+			}
+		}
+
+		return filePath;
 	}
 
+	/**
+	 * Read and return a Result object file.
+	 * 
+	 * @param file
+	 * @return Result object.
+	 * @throws IOException
+	 * @throws ClassNotFoundException
+	 */
+	public Result readParseResult(String filePath) throws IOException, ClassNotFoundException {
+
+		Result result = null;
+
+		ObjectInputStream obInputStream = null;
+
+		try {
+
+			// read object from input stream
+			obInputStream = new ObjectInputStream(new FileInputStream(filePath));
+
+			// cast into result
+			result = (Result) obInputStream.readObject();
+
+		} finally {
+			// close if input stream was created
+			if (obInputStream != null) {
+				obInputStream.close();
+			}
+		}
+
+		return result;
+	}
 }
