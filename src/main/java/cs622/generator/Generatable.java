@@ -8,6 +8,11 @@ import cs622.component.Component;
 public interface Generatable {
 
 	/**
+	 * FileName
+	 */
+	public String getInputPath();
+
+	/**
 	 * The components that will be used to generate the Java file.
 	 * 
 	 * @return Java file components.

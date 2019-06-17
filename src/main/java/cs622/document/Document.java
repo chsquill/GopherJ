@@ -14,6 +14,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import cs622.component.Component;
+import cs622.db.DataStore;
 import cs622.generator.Generatable;
 import cs622.generator.Result;
 
@@ -26,6 +27,9 @@ public abstract class Document implements Generatable {
 
 	/** Components to be included in the generated Java file. */
 	protected Component[] components;
+
+	/** Input types - local, file path, url */
+	protected String inputPath;
 
 	/**
 	 * Parses the input into a Component[].
@@ -64,7 +68,11 @@ public abstract class Document implements Generatable {
 	 */
 	public void readInputFromFile(String filePath) throws IOException {
 
-		// Given the provided file path open it for reading and read it contents.
+		// Given the provided file path open it for reading and read it
+		// contents.
+
+		// record input path
+		inputPath = filePath;
 
 		Scanner scanner = null;
 
@@ -87,10 +95,15 @@ public abstract class Document implements Generatable {
 				fileOutput.append(scanner.nextLine());
 			}
 
-			// pass the read string input to the existing parse method using a string
+			// pass the read string input to the existing parse method using a
+			// string
 			readInput(fileOutput.toString());
 
-		} catch (IOException e) {
+		} catch (Exception e) {
+			// record error of parse
+			if (DataStore.getInstance() != null) {
+				DataStore.getInstance().recordResults(filePath, "ERROR", e.getMessage());
+			}
 			throw e;
 		} finally {
 			// close the scanner when complete
@@ -119,7 +132,8 @@ public abstract class Document implements Generatable {
 				return sortedFilePaths;
 			}
 
-			// use streams to find a sorted list of valid files, this stream validates
+			// use streams to find a sorted list of valid files, this stream
+			// validates
 			// each file against validInput(...)
 			sortedFilePaths = Arrays
 					.stream(dir.listFiles(
@@ -145,7 +159,9 @@ public abstract class Document implements Generatable {
 	}
 
 	public void readInput(URL input) {
-		// TODO read input from URL
+		// record input path
+		inputPath = input.toString();
+		// TODO for future feature
 	}
 
 	public Component[] getComponents() {
@@ -156,4 +172,8 @@ public abstract class Document implements Generatable {
 		this.components = components;
 	}
 
+	@Override
+	public String getInputPath() {
+		return inputPath;
+	}
 }

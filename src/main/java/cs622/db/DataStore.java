@@ -3,6 +3,7 @@ package cs622.db;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -10,55 +11,51 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * DataStore encapsulates database access logic. It leverages two tables
+ * GOPHERJ_AUDIT_HEADER and GOPHERJ_AUDIT_DETAIL used to capture the results of
+ * a run of GopherJ.
+ *
+ */
 public class DataStore {
 
-	// fields for the record
+	// fields for the records GOPHERJ_AUDIT_HEADER and GOPHERJ_AUDIT_DETAIL
 	private final String ID = "ID";
-	private final String INPUT_FILE_NAME = "INPUT_FILE_NAME";
-	private final String OUT_FILE_NAME = "OUT_FILE_NAME";
 	private final String MESSAGE = "MESSAGE";
 	private final String TIME = "TIME";
+	private final String INPUT_FILE_NAME = "INPUT_FILE_NAME";
+	private final String OUT_FILE_NAME = "OUT_FILE_NAME";
 
 	// database connection info
 	private String protocal = "jdbc:derby";
 	private String databaseName = "derbyDB";
 
-	private String AUDIT_HEADER_TABLE = "GOPHERJ_AUDIT_HEADER";
-	private String AUDIT_DETAIL_TABLE = "GOPHERJ_AUDIT_DETAIL";
-
 	// connection to database
 	private Connection conn;
 
-	public static void main(String[] args) throws SQLException {
-
-		DataStore test = new DataStore();
-
-		// test.createTables();
-
-		test.recordResults("test0", "test1", "test2");
-
-		List<ResultRecord> list = test.fetchResultRecords(1);
-
-		for (ResultRecord resultRecord : list) {
-			System.out.println(resultRecord);
-		}
-	}
+	// singleton instance of a data store
+	private static DataStore dataStore;
 
 	/**
-	 * DataStore constuctor.
+	 * Private DataStore constructor.
+	 * 
+	 * Only want to create one of these.
 	 */
-	public DataStore() {
+	private DataStore() {
 		// create tables
 		createTables();
 	}
 
-	// Gets a connection. Creates one if one does not exits
-	private Connection getConnection() throws SQLException {
-		// create the connection to the database if null
-		if (conn == null) {
-			conn = DriverManager.getConnection(String.format("%s:%s;create=true", protocal, databaseName));
+	/**
+	 * Gets the singleton instance of this data store.
+	 * 
+	 * @return DataStore
+	 */
+	public static DataStore getInstance() {
+		if (dataStore == null) {
+			dataStore = new DataStore();
 		}
-		return conn;
+		return dataStore;
 	}
 
 	/**
@@ -67,7 +64,7 @@ public class DataStore {
 	 * @param size
 	 * @return List of ResultRecords
 	 */
-	public List<ResultRecord> fetchResultRecords(int size) {
+	public List<ResultRecord> fetchResultRecords() {
 
 		// return value
 		List<ResultRecord> records = new ArrayList<>();
@@ -77,13 +74,9 @@ public class DataStore {
 			// create statement for query
 			Statement stmt = getConnection().createStatement();
 
-			// execute select
-			ResultSet set = stmt
-					.executeQuery(String.format("SELECT * FROM %s ORDER BY %s DESC", AUDIT_HEADER_TABLE, TIME));
-
-			// ResultSet set2 = stmt
-			// .executeQuery(String.format("SELECT * FROM %s ORDER BY %s DESC",
-			// AUDIT_HEADER_TABLE, TIME));
+			// execute select joining two tables on primary id
+			ResultSet set = stmt.executeQuery("SELECT * FROM GOPHERJ_AUDIT_HEADER header "
+					+ "JOIN GOPHERJ_AUDIT_DETAIL detail on header.id = detail.id ORDER BY header.time DESC");
 
 			// process result set
 			while (set.next()) {
@@ -116,22 +109,53 @@ public class DataStore {
 		try {
 
 			// create statement with connection created at start up
-			Statement stmt = getConnection().createStatement();
+			// Statement stmt = getConnection().createStatement();
 
 			// common id for header and detail record
 			UUID id = UUID.randomUUID();
 
 			// insert header record into database using UUID as ID
-			stmt.executeUpdate(String.format("INSERT INTO %s (%s, %s, %s) VALUES ('%s','%s',%d)", AUDIT_HEADER_TABLE,
-					ID, MESSAGE, TIME, id, message, System.currentTimeMillis()));
+			// stmt.executeUpdate(
+			// String.format("INSERT INTO GOPHERJ_AUDIT_HEADER (ID, MESSAGE,
+			// TIME) VALUES ('%s','%s',%d)", id,
+			// message, System.currentTimeMillis()));
+
+			PreparedStatement prepstmt = conn
+					.prepareStatement("INSERT INTO GOPHERJ_AUDIT_HEADER (ID, MESSAGE, TIME) VALUES (?,?,?)");
+			prepstmt.setString(1, id.toString());
+			prepstmt.setString(2, message);
+			prepstmt.setLong(3, System.currentTimeMillis());
+			prepstmt.executeUpdate();
 
 			// insert detail record into database using UUID as ID
-			stmt.executeUpdate(String.format("INSERT INTO %s (%s, %s, %s) VALUES ('%s','%s','%s')", AUDIT_DETAIL_TABLE,
-					ID, INPUT_FILE_NAME, OUT_FILE_NAME, id, inputFileName, outputFileName));
+			// stmt.executeUpdate(String.format(
+			// "INSERT INTO GOPHERJ_AUDIT_DETAIL (ID, INPUT_FILE_NAME,
+			// OUT_FILE_NAME) VALUES ('%s','%s','%s')", id,
+			// inputFileName, outputFileName));
+			prepstmt = conn.prepareStatement(
+					"INSERT INTO GOPHERJ_AUDIT_DETAIL (ID, INPUT_FILE_NAME, OUT_FILE_NAME) VALUES (?,?,?)");
+			prepstmt.setString(1, id.toString());
+			prepstmt.setString(2, inputFileName);
+			prepstmt.setString(3, outputFileName);
+			prepstmt.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new RuntimeException(e.getMessage());
 		}
+	}
+
+	/**
+	 * Gets a connection to the db, creates one if one if it does not exits.
+	 * 
+	 * @return Connection to db.
+	 * @throws SQLException
+	 */
+	private Connection getConnection() throws SQLException {
+		// create the connection to the database if null
+		if (conn == null) {
+			conn = DriverManager.getConnection(String.format("%s:%s;create=true", protocal, databaseName));
+		}
+		return conn;
 	}
 
 	/**
@@ -142,11 +166,13 @@ public class DataStore {
 	private void createTables() {
 
 		try {
-			// metadata for the database
+			// check to see if table needs to be created
+
+			// meta-data for the database
 			DatabaseMetaData metaData = getConnection().getMetaData();
 
 			// result of table creating search
-			ResultSet rs = metaData.getTables(null, "APP", AUDIT_HEADER_TABLE, null);
+			ResultSet rs = metaData.getTables(null, "APP", "GOPHERJ_AUDIT_HEADER", null);
 
 			// if the table is not created
 			if (!rs.next()) {
@@ -154,15 +180,14 @@ public class DataStore {
 				// get statement from connection that was created at startup
 				Statement stmt = getConnection().createStatement();
 
-				// create table GOPHREJ_AUDIT
-				stmt.executeUpdate(
-						String.format("CREATE TABLE %s (%s VARCHAR(40) PRIMARY KEY, " + "%s VARCHAR(100), %s BIGINT)",
-								AUDIT_HEADER_TABLE, ID, MESSAGE, TIME));
+				// create table GOPHERJ_AUDIT_HEADER
+				stmt.executeUpdate(String.format("CREATE TABLE GOPHERJ_AUDIT_HEADER (%s VARCHAR(40) PRIMARY KEY, "
+						+ "%s VARCHAR(100), %s BIGINT)", ID, MESSAGE, TIME));
 
 				// create table GOPHREJ_AUDIT_DETAIL
-				stmt.executeUpdate(
-						String.format("CREATE TABLE %s (%s VARCHAR(40) PRIMARY KEY, %s VARCHAR(100), %s VARCHAR(100))",
-								AUDIT_DETAIL_TABLE, ID, INPUT_FILE_NAME, OUT_FILE_NAME));
+				stmt.executeUpdate(String.format(
+						"CREATE TABLE GOPHERJ_AUDIT_DETAIL (%s VARCHAR(40) PRIMARY KEY, %s VARCHAR(100), %s VARCHAR(100))",
+						ID, INPUT_FILE_NAME, OUT_FILE_NAME));
 			}
 
 		} catch (SQLException e) {

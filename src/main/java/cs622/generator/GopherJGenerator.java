@@ -16,6 +16,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
 import cs622.component.Component;
+import cs622.db.DataStore;
 import cs622.document.JsonDocument;
 import cs622.document.XmlDocument;
 
@@ -84,18 +85,25 @@ public class GopherJGenerator {
 
 		JavaFile javaFile = JavaFile.builder("gopherj", tyepSpec).build();
 
-		String output = javaFile.toString();
+		String javaOutput = javaFile.toString();
 
 		// prints output to console
-		System.out.println(output);
+		System.out.println(javaOutput);
+
+		String targetOutput = "CONSOLE";
 
 		// option to write file to disk after generation
 		if (writeOutputToDisk) {
 			// writes the output to disk
-			writeFileToDisk(output);
+			targetOutput = writeFileToDisk(javaOutput);
 		}
 
-		return output;
+		// record if data store was created
+		if (DataStore.getInstance() != null) {
+			DataStore.getInstance().recordResults(generatable.getInputPath(), targetOutput, "SUCCESS");
+		}
+
+		return javaOutput;
 
 	}
 
@@ -110,7 +118,7 @@ public class GopherJGenerator {
 	 * @param outputString
 	 *            Output string that will be written to disk.
 	 */
-	public void writeFileToDisk(String outputString) {
+	public String writeFileToDisk(String outputString) {
 
 		FileWriter writer = null;
 
@@ -129,7 +137,7 @@ public class GopherJGenerator {
 			// validate file was created
 			if (!created) {
 				System.out.println(System.out.format("File %s not created", ouputFile.getName()));
-				return;
+				return "ERROR";
 			}
 
 			writer = new FileWriter(ouputFile);
@@ -138,9 +146,11 @@ public class GopherJGenerator {
 			writer.write(outputString);
 
 			System.out.format("File generated: %s", ouputFile.getAbsolutePath());
+			return ouputFile.getAbsolutePath();
 
 		} catch (IOException e) {
 			System.out.println("Error writing File");
+			return "ERROR";
 		} finally {
 
 			// close the writer

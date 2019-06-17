@@ -2,7 +2,10 @@ package cs622.ui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
+import cs622.db.DataStore;
+import cs622.db.ResultRecord;
 import cs622.document.Document;
 import cs622.document.JsonDocument;
 import cs622.generator.GopherJGenerator;
@@ -41,6 +44,7 @@ public class GopherJUi extends Application {
 	private Button saveOutputButton;
 	private Button readOutputButton;
 	private Button clearButton;
+	private Button viewAuditButton;
 	private TextField textField;
 	private TextArea textArea;
 	private Label messageLabel;
@@ -64,6 +68,7 @@ public class GopherJUi extends Application {
 		saveOutputButton = new Button("Save Output");
 		readOutputButton = new Button("Read Output");
 		clearButton = new Button("Clear");
+		viewAuditButton = new Button("View Audit");
 		textField = new TextField();
 		textField.setMinWidth(400);
 		textArea = new TextArea();
@@ -75,6 +80,7 @@ public class GopherJUi extends Application {
 		generateButton.setOnAction(event -> generateAction());
 		saveOutputButton.setOnAction(event -> saveOutputResultAction(mainStage));
 		readOutputButton.setOnAction(event -> readOutputResultAction(mainStage));
+		viewAuditButton.setOnAction(event -> viewAuditAction(mainStage));
 
 		// clear text fields / areas
 		clearButton.setOnAction(event -> {
@@ -101,6 +107,7 @@ public class GopherJUi extends Application {
 		bottomPane.getChildren().add(copyButton);
 		bottomPane.getChildren().add(saveOutputButton);
 		bottomPane.getChildren().add(readOutputButton);
+		bottomPane.getChildren().add(viewAuditButton);
 		bottomPane.getChildren().add(messageLabel);
 
 		// main scene layout
@@ -121,6 +128,8 @@ public class GopherJUi extends Application {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
 		File fileSelected = fileChooser.showOpenDialog(mainStage);
+		if (fileSelected == null)
+			return;
 		textField.setText(fileSelected.getAbsolutePath());
 		messageLabel.setText("File chosen");
 		textArea.clear();
@@ -186,6 +195,29 @@ public class GopherJUi extends Application {
 			messageLabel.setText("Failed to find valid object");
 		} catch (IOException e) {
 			messageLabel.setText("Failed to read results");
+		} catch (Exception e) {
+			messageLabel.setText("Failed to read results");
+		}
+	}
+
+	// display to ui the audit results from DataSource
+	private void viewAuditAction(Stage mainStage) {
+		try {
+			textArea.clear();
+			// get the data store if it was created
+			if (DataStore.getInstance() != null) {
+				List<ResultRecord> records = DataStore.getInstance().fetchResultRecords();
+
+				StringBuffer buf = new StringBuffer();
+				// concatenate the audit records for display to ui
+				for (ResultRecord resultRecord : records) {
+					buf.append(resultRecord + "\n");
+				}
+				textArea.setText(buf.toString());
+			}
+			messageLabel.setText("Loaded audit results");
+		} catch (Exception e) {
+			messageLabel.setText("Failed to retrieve audit results");
 		}
 	}
 }
