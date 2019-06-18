@@ -108,17 +108,8 @@ public class DataStore {
 
 		try {
 
-			// create statement with connection created at start up
-			// Statement stmt = getConnection().createStatement();
-
 			// common id for header and detail record
 			UUID id = UUID.randomUUID();
-
-			// insert header record into database using UUID as ID
-			// stmt.executeUpdate(
-			// String.format("INSERT INTO GOPHERJ_AUDIT_HEADER (ID, MESSAGE,
-			// TIME) VALUES ('%s','%s',%d)", id,
-			// message, System.currentTimeMillis()));
 
 			PreparedStatement prepstmt = conn
 					.prepareStatement("INSERT INTO GOPHERJ_AUDIT_HEADER (ID, MESSAGE, TIME) VALUES (?,?,?)");
@@ -127,11 +118,6 @@ public class DataStore {
 			prepstmt.setLong(3, System.currentTimeMillis());
 			prepstmt.executeUpdate();
 
-			// insert detail record into database using UUID as ID
-			// stmt.executeUpdate(String.format(
-			// "INSERT INTO GOPHERJ_AUDIT_DETAIL (ID, INPUT_FILE_NAME,
-			// OUT_FILE_NAME) VALUES ('%s','%s','%s')", id,
-			// inputFileName, outputFileName));
 			prepstmt = conn.prepareStatement(
 					"INSERT INTO GOPHERJ_AUDIT_DETAIL (ID, INPUT_FILE_NAME, OUT_FILE_NAME) VALUES (?,?,?)");
 			prepstmt.setString(1, id.toString());
