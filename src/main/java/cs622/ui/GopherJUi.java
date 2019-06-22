@@ -36,7 +36,7 @@ import javafx.stage.Stage;
 public class GopherJUi extends Application {
 
 	// generator for code generation
-	private GopherJGenerator generator = new GopherJGenerator();
+	private GopherJGenerator generator = GopherJGenerator.getInstance(false);
 
 	// document manager
 	private DocumentManager manager = new DocumentManager();
@@ -61,10 +61,6 @@ public class GopherJUi extends Application {
 
 	// main UI method
 	public void start(Stage mainStage) {
-
-		// create generator
-		generator = new GopherJGenerator();
-		generator.setWriteOutputToDisk(false);
 
 		// initialize the ui components
 		directoryButton = new Button("Choose Directory");
@@ -191,7 +187,7 @@ public class GopherJUi extends Application {
 	// saved in a directory chosen by user
 	private void saveOutputResultAction(Stage mainStage) {
 		Document doc = new JsonDocument();
-		String jsonInput = doc.readContentsFromFile(textField.getText());
+		String jsonInput = manager.readContentsFromFile(textField.getText());
 		if (doc.validInput(jsonInput) && !textArea.getText().isEmpty()) {
 			DirectoryChooser directoryChooser = new DirectoryChooser();
 			directoryChooser.setTitle("Save Result Directory");

@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import cs622.document.Document;
+import cs622.document.DocumentManager;
 import cs622.document.JsonDocument;
 import cs622.document.exception.JsonParseException;
 
@@ -71,7 +72,7 @@ class DocumentTest {
 
 		String dirName = "/home/chuck/git/GopherJ/json_files";
 
-		Document doc = new JsonDocument();
+		DocumentManager doc = new DocumentManager();
 
 		// list of validated and sorted files
 		List<String> sortedValidDocuments = doc.readValidFiles(dirName);

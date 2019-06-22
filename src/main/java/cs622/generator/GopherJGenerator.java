@@ -33,14 +33,31 @@ public class GopherJGenerator {
 	public static final String GENERATED_FILE_NAME = "GopherJDto.java";
 
 	// flat for writing output to disk
-	private boolean writeOutputToDisk = true;;
+	private static boolean writeOutputToDisk = true;;
 
-	public boolean isWriteOutputToDisk() {
-		return writeOutputToDisk;
+	// singleton instance of a GopherJGenerator
+	private static GopherJGenerator generator;
+
+	/**
+	 * Private GopherJGenerator constructor.
+	 * 
+	 * Only want to create one of these.
+	 */
+	private GopherJGenerator() {
+		super();
 	}
 
-	public void setWriteOutputToDisk(boolean writeOutputToDisk) {
-		this.writeOutputToDisk = writeOutputToDisk;
+	/**
+	 * Gets the singleton instance of this GopherJGenerator.
+	 * 
+	 * @return DataStore
+	 */
+	public static GopherJGenerator getInstance(boolean writeOutputToDisk) {
+		if (generator == null) {
+			generator = new GopherJGenerator();
+			GopherJGenerator.writeOutputToDisk = writeOutputToDisk;
+		}
+		return generator;
 	}
 
 	/**

@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -23,75 +24,76 @@ import cs622.generator.GopherJGenerator;
 public class DocumentManager {
 
 	// generator for code generation
-	private GopherJGenerator generator = new GopherJGenerator();
+	private GopherJGenerator generator;
 
+	/**
+	 * Constructor
+	 */
 	public DocumentManager() {
 
-		// create generator
-		generator = new GopherJGenerator();
-		generator.setWriteOutputToDisk(false);
+		// initialize a generator
+		generator = GopherJGenerator.getInstance(false);
 	}
 
 	/**
-	 * Finds all files in a directory of file type '.json'
+	 * Processes json file(s). If the filePath is a directory all the valid json
+	 * files in the directory will be parsed. Otherwise a single file will be
+	 * parsed.
 	 * 
-	 * @param directory
-	 *            of files
-	 * @return List of file paths for json files.
+	 * @param filePath
+	 * @return Generated Java source for one or more files.
+	 * @throws Exception
 	 */
-	public List<String> process(String filePath) {
+	public List<String> process(String filePath) throws Exception {
 
 		// CopyOnWriteArrayList is thread safe
 		List<String> results = new CopyOnWriteArrayList<>();
 
-		try {
+		File file = new File(filePath);
 
-			File file = new File(filePath);
+		// if the file not a directory then process singel file
+		if (!file.isDirectory()) {
 
-			if (!file.isDirectory()) {
-				Document doc = new JsonDocument();
-				doc.readInputFromFile(filePath);
-				results.add(generator.generate(doc));
-				return results;
-			}
+			// assume JsonDocument for now
+			Document doc = new JsonDocument();
+
+			doc.readInputFromFile(filePath);
+
+			// gernare and add results
+			results.add(generator.generate(doc));
+
+		} else {
 
 			// gather all the valid json files alphabetically
 			List<String> jsonFiles = readValidFiles(filePath);
+
+			List<DocumentThread> threads = new ArrayList<>();
 
 			// loop thru the json files
 			for (int i = 0; i < jsonFiles.size(); i++) {
 
 				String jsonFile = jsonFiles.get(i);
 
-				// expect more than one file so name appropriately
+				// expect more than one file so name sequentially
 				final String fileName = "GopherJDTO_" + i;
 
 				// create a new thread per file
-				Thread documentThread = new Thread(new Runnable() {
-					@Override
-					public void run() {
-						try {
-							// generate the Document
-							Document doc = new JsonDocument();
-							doc.setJavaClassName(fileName);
-							doc.readInputFromFile(jsonFile);
-							// results is thread-safe
-							results.add(generator.generate(doc));
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-					}
-				});
+				DocumentThread documentThread = new DocumentThread(fileName, jsonFile, results);
 
-				documentThread.start(); // start thread
-				documentThread.join(); // join current thread
+				// save the threads
+				threads.add(documentThread);
+
+				// start thread
+				documentThread.start();
 			}
 
-		} catch (Exception e) {
-			e.printStackTrace();
+			// join all the threads to current thread
+			for (Thread thread : threads) {
+				thread.join();
+			}
 		}
 
-		return results;
+		return results; // return all the results
 	}
 
 	/**
@@ -101,7 +103,7 @@ public class DocumentManager {
 	 *            of files
 	 * @return List of file paths for json files.
 	 */
-	private List<String> readValidFiles(String directory) {
+	public List<String> readValidFiles(String directory) {
 
 		List<String> sortedFilePaths = null;
 
@@ -131,7 +133,7 @@ public class DocumentManager {
 	/*
 	 * Utility method to read contents from file
 	 */
-	private String readContentsFromFile(String filePath) {
+	public String readContentsFromFile(String filePath) {
 		try {
 			return new String(Files.readAllBytes(Paths.get(filePath)), StandardCharsets.UTF_8);
 		} catch (IOException e) {

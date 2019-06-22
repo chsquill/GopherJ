@@ -5,13 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 
 import cs622.component.Component;
 import cs622.db.DataStore;
@@ -26,13 +20,13 @@ import cs622.generator.Result;
 public abstract class Document implements Generatable {
 
 	/** Components to be included in the generated Java file. */
-	protected Component[] components;
+	private Component[] components;
 
 	/** Input types - local, file path, url */
-	protected String inputPath;
+	private String inputPath;
 
 	/** Java Class Name */
-	protected String javaClassName;
+	private String javaClassName;
 
 	/**
 	 * Parses the input into a Component[].
@@ -121,51 +115,6 @@ public abstract class Document implements Generatable {
 			if (scanner != null) {
 				scanner.close();
 			}
-		}
-	}
-
-	/**
-	 * Finds all files in a directory of file type '.json'
-	 * 
-	 * @param directory
-	 *            of files
-	 * @return List of file paths for json files.
-	 */
-	public List<String> readValidFiles(String directory) {
-
-		List<String> sortedFilePaths = null;
-
-		try {
-
-			File dir = new File(directory);
-
-			if (!dir.isDirectory()) {
-				return sortedFilePaths;
-			}
-
-			// use streams to find a sorted list of valid files, this stream
-			// validates
-			// each file against validInput(...)
-			sortedFilePaths = Arrays
-					.stream(dir.listFiles(
-							file -> (file.isFile() && validInput(readContentsFromFile(file.getAbsolutePath())))))
-					.map(file -> file.getAbsolutePath()).sorted().collect(Collectors.toList());
-
-		} catch (Exception e) {
-			// nothing to do here - will return null
-		}
-
-		return sortedFilePaths;
-	}
-
-	/*
-	 * Utility method to read contents from file
-	 */
-	public String readContentsFromFile(String filePath) {
-		try {
-			return new String(Files.readAllBytes(Paths.get(filePath)), StandardCharsets.UTF_8);
-		} catch (IOException e) {
-			return "not_valid";
 		}
 	}
 

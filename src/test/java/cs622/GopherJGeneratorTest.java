@@ -26,7 +26,7 @@ class GopherJGeneratorTest {
 	@Test
 	void packageStatementCreatedTest() {
 
-		GopherJGenerator generator = new GopherJGenerator();
+		GopherJGenerator generator = GopherJGenerator.getInstance(true);
 
 		Document doc = new JsonDocument();
 
@@ -51,7 +51,7 @@ class GopherJGeneratorTest {
 
 		try {
 
-			GopherJGenerator generator = new GopherJGenerator();
+			GopherJGenerator generator = GopherJGenerator.getInstance(true);
 
 			Document doc = new JsonDocument();
 
@@ -79,7 +79,7 @@ class GopherJGeneratorTest {
 
 		final String SAMPLE_TEXT = "SOME TEXT";
 
-		GopherJGenerator generator = new GopherJGenerator();
+		GopherJGenerator generator = GopherJGenerator.getInstance(true);
 
 		// write a file with some text to disk
 		generator.writeFileToDisk(SAMPLE_TEXT);
@@ -112,7 +112,7 @@ class GopherJGeneratorTest {
 	@Test
 	void storeAndReadResultTest() {
 
-		GopherJGenerator generator = new GopherJGenerator();
+		GopherJGenerator generator = GopherJGenerator.getInstance(true);
 
 		try {
 

@@ -76,7 +76,7 @@ public class Main {
 
 	private static boolean process(Document document, Scanner sc) {
 
-		GopherJGenerator gen = new GopherJGenerator();
+		GopherJGenerator gen = GopherJGenerator.getInstance(true);
 
 		try {
 			document.readInputFromFile(promptForFilePath(sc));
