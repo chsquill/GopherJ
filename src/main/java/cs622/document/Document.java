@@ -31,6 +31,9 @@ public abstract class Document implements Generatable {
 	/** Input types - local, file path, url */
 	protected String inputPath;
 
+	/** Java Class Name */
+	protected String javaClassName;
+
 	/**
 	 * Parses the input into a Component[].
 	 * 
@@ -47,6 +50,14 @@ public abstract class Document implements Generatable {
 	 * @return If document is valid.
 	 */
 	public abstract boolean validInput(String input);
+
+	public String getJavaClassName() {
+		return javaClassName;
+	}
+
+	public void setJavaClassName(String javaClassName) {
+		this.javaClassName = javaClassName;
+	}
 
 	/**
 	 * Reads the string input of a document to be parsed.

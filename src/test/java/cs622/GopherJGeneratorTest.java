@@ -1,8 +1,8 @@
 package cs622;
 
+import static org.junit.Assert.fail;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -43,8 +43,8 @@ class GopherJGeneratorTest {
 	}
 
 	/*
-	 * Validate the first line of the generated string starts with "package" once
-	 * read from a sample input file.
+	 * Validate the first line of the generated string starts with "package"
+	 * once read from a sample input file.
 	 */
 	@Test
 	void inputFromAFileAndPackageStatementCreatedTest() {
@@ -71,8 +71,8 @@ class GopherJGeneratorTest {
 	}
 
 	/*
-	 * Validate that a file is persisted to disk and once read contains the expected
-	 * contents.
+	 * Validate that a file is persisted to disk and once read contains the
+	 * expected contents.
 	 */
 	@Test
 	void fileWrittenToDiskTest() {
@@ -84,7 +84,8 @@ class GopherJGeneratorTest {
 		// write a file with some text to disk
 		generator.writeFileToDisk(SAMPLE_TEXT);
 
-		// find file created - **Note - file always created as GopherJDto.java for now
+		// find file created - **Note - file always created as GopherJDto.java
+		// for now
 		File outputFile = new File(GopherJGenerator.GENERATED_FILE_NAME);
 
 		// validate that the file was written to disk
@@ -105,8 +106,8 @@ class GopherJGeneratorTest {
 	}
 
 	/*
-	 * Validate that the results of generation (input source, output code) can be
-	 * stored and retrieved in Result object.
+	 * Validate that the results of generation (input source, output code) can
+	 * be stored and retrieved in Result object.
 	 */
 	@Test
 	void storeAndReadResultTest() {

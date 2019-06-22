@@ -24,19 +24,18 @@ dependencies {
     // This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:21.0'
 
-    // Use JUnit test framework
+    
+    compile group: 'org.json', name: 'json', version: '20180813' 
+    compile group: 'com.squareup', name: 'javapoet', version: '1.9.0'
+    
+	compile fileTree(dir: 'derby_libs', include: ['*.jar'])
+	
+	// Use JUnit test framework
     //testImplementation 'junit:junit:4.12'
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: "5.1.0"
     testCompile group: 'org.junit.platform', name: 'junit-platform-launcher', version: "1.1.0"
-
-    
-    
-    compile group: 'org.json', name: 'json', version: '20180813'
-    
-    compile group: 'com.squareup', name: 'javapoet', version: '1.9.0'
-    
-
-	compile fileTree(dir: 'derby_libs', include: ['*.jar'])    
+	
+	testCompile fileTree(dir: 'derby_libs', include: ['*.jar'])    
     
 }
 

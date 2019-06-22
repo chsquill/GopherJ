@@ -8,6 +8,13 @@ import cs622.component.Component;
 public interface Generatable {
 
 	/**
+	 * Output Java class name for the generated class.
+	 * 
+	 * @return Java class name.
+	 */
+	public String getJavaClassName();
+
+	/**
 	 * FileName
 	 */
 	public String getInputPath();

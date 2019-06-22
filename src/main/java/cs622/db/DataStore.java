@@ -104,7 +104,7 @@ public class DataStore {
 	 * @param outputFileName
 	 * @param message
 	 */
-	public void recordResults(String inputFileName, String outputFileName, String message) {
+	public synchronized void recordResults(String inputFileName, String outputFileName, String message) {
 
 		try {
 

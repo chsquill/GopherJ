@@ -55,9 +55,11 @@ public class GopherJGenerator {
 			System.out.println("WSDL file : " + ((XmlDocument) generatable).getWsdlUrl());
 		}
 
+		String javaClassName = generatable.getJavaClassName() == null ? "GopherJDto" : generatable.getJavaClassName();
+
 		// generate class
-		TypeSpec.Builder classBuilder = TypeSpec.classBuilder("GopherJDto").addModifiers(Modifier.PUBLIC)
-				.addJavadoc("GopherJDto - This class was auto generated.");
+		TypeSpec.Builder classBuilder = TypeSpec.classBuilder(javaClassName).addModifiers(Modifier.PUBLIC)
+				.addJavadoc(javaClassName + " - This class was auto generated.");
 
 		// generate fields
 		for (Component component : generatable.getComponents()) {

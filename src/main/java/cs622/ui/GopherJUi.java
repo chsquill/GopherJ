@@ -7,6 +7,7 @@ import java.util.List;
 import cs622.db.DataStore;
 import cs622.db.ResultRecord;
 import cs622.document.Document;
+import cs622.document.DocumentManager;
 import cs622.document.JsonDocument;
 import cs622.generator.GopherJGenerator;
 import cs622.generator.Result;
@@ -37,7 +38,11 @@ public class GopherJUi extends Application {
 	// generator for code generation
 	private GopherJGenerator generator = new GopherJGenerator();
 
+	// document manager
+	private DocumentManager manager = new DocumentManager();
+
 	// UI components
+	private Button directoryButton;
 	private Button fileButton;
 	private Button copyButton;
 	private Button generateButton;
@@ -62,6 +67,7 @@ public class GopherJUi extends Application {
 		generator.setWriteOutputToDisk(false);
 
 		// initialize the ui components
+		directoryButton = new Button("Choose Directory");
 		fileButton = new Button("Choose Json File");
 		copyButton = new Button("Copy");
 		generateButton = new Button("Generate");
@@ -75,6 +81,7 @@ public class GopherJUi extends Application {
 		messageLabel = new Label();
 
 		// define actions for buttons
+		directoryButton.setOnAction(event -> chooseDirectoryAction(mainStage));
 		fileButton.setOnAction(event -> chooseFileAction(mainStage));
 		copyButton.setOnAction(event -> copyAction());
 		generateButton.setOnAction(event -> generateAction());
@@ -95,6 +102,7 @@ public class GopherJUi extends Application {
 		FlowPane topPane = new FlowPane();
 		topPane.setHgap(10);
 		topPane.setPadding(new Insets(10));
+		topPane.getChildren().add(directoryButton);
 		topPane.getChildren().add(fileButton);
 		topPane.getChildren().add(textField);
 		topPane.getChildren().add(generateButton);
@@ -123,10 +131,26 @@ public class GopherJUi extends Application {
 		mainStage.show();
 	}
 
+	// choose a directory for parsing
+	private void chooseDirectoryAction(Stage mainStage) {
+		DirectoryChooser chooser = new DirectoryChooser();
+		chooser.setTitle("Open Resource Directory");
+		// chooser.setInitialDirectory(new
+		// File(System.getProperty("user.home")));
+		chooser.setInitialDirectory(new File("C:\\Users\\csquill\\git\\GopherJ"));
+		File fileSelected = chooser.showDialog(mainStage);
+		if (fileSelected == null)
+			return;
+		textField.setText(fileSelected.getAbsolutePath());
+		messageLabel.setText("Directory chosen");
+		textArea.clear();
+	}
+
 	// choose a file for parsing
 	private void chooseFileAction(Stage mainStage) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
+		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 		File fileSelected = fileChooser.showOpenDialog(mainStage);
 		if (fileSelected == null)
 			return;
@@ -147,9 +171,15 @@ public class GopherJUi extends Application {
 	// generate code or display error to UI
 	private void generateAction() {
 		try {
-			Document doc = new JsonDocument();
-			doc.readInputFromFile(textField.getText());
-			textArea.setText(generator.generate(doc));
+			List<String> results = manager.process(textField.getText());
+			StringBuffer buffer = new StringBuffer();
+			for (String result : results) {
+				if (buffer.length() != 0) {
+					buffer.append("\n\n###########\n\n");
+				}
+				buffer.append(result);
+			}
+			textArea.setText(buffer.toString());
 			messageLabel.setText("Code Generated");
 		} catch (Exception e) {
 			messageLabel.setText("Error generating code");
