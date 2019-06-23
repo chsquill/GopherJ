@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import cs622.document.Document;
 import cs622.document.JsonDocument;
@@ -18,13 +18,13 @@ import cs622.generator.Result;
 /*
  * Test for the GopherJGenerator class.
  */
-class GopherJGeneratorTest {
+public class GopherJGeneratorTest {
 
 	/*
 	 * Validate the first line of the generated string starts with "package".
 	 */
 	@Test
-	void packageStatementCreatedTest() {
+	public void packageStatementCreatedTest() {
 
 		GopherJGenerator generator = GopherJGenerator.getInstance(true);
 
@@ -47,7 +47,7 @@ class GopherJGeneratorTest {
 	 * once read from a sample input file.
 	 */
 	@Test
-	void inputFromAFileAndPackageStatementCreatedTest() {
+	public void inputFromAFileAndPackageStatementCreatedTest() {
 
 		try {
 
@@ -75,7 +75,7 @@ class GopherJGeneratorTest {
 	 * expected contents.
 	 */
 	@Test
-	void fileWrittenToDiskTest() {
+	public void fileWrittenToDiskTest() {
 
 		final String SAMPLE_TEXT = "SOME TEXT";
 
@@ -110,7 +110,7 @@ class GopherJGeneratorTest {
 	 * be stored and retrieved in Result object.
 	 */
 	@Test
-	void storeAndReadResultTest() {
+	public void storeAndReadResultTest() {
 
 		GopherJGenerator generator = GopherJGenerator.getInstance(true);
 

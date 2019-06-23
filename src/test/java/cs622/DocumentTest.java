@@ -4,22 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.FileNotFoundException;
-import java.util.List;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import cs622.document.Document;
-import cs622.document.DocumentManager;
 import cs622.document.JsonDocument;
 import cs622.document.exception.JsonParseException;
 
 /*
  * Test for the Document class.
  */
-class DocumentTest {
+public class DocumentTest {
 
 	@Test
-	void validJsonParseTest() {
+	public void validJsonParseTest() {
 
 		// validate parsing a properly formatted json string
 
@@ -32,7 +30,7 @@ class DocumentTest {
 	}
 
 	@Test
-	void invalidJsonParseTest() {
+	public void invalidJsonParseTest() {
 
 		// validate that an improper formatted json string raised an exception
 
@@ -49,7 +47,7 @@ class DocumentTest {
 	}
 
 	@Test
-	void noInputFileFoundTest() {
+	public void noInputFileFoundTest() {
 
 		// validate FileNotFountException if the input file was not found
 
@@ -66,23 +64,7 @@ class DocumentTest {
 	}
 
 	@Test
-	void findValidJsonFromDirectoryTest() {
-
-		// validate a list of json files was returned
-
-		String dirName = "/home/chuck/git/GopherJ/json_files";
-
-		DocumentManager doc = new DocumentManager();
-
-		// list of validated and sorted files
-		List<String> sortedValidDocuments = doc.readValidFiles(dirName);
-
-		// assert that more than one was returned
-		assertTrue(sortedValidDocuments.size() > 0);
-	}
-
-	@Test
-	void validateJsonTest() {
+	public void validateJsonTest() {
 
 		// validate that a string is a valid JSON document
 

@@ -131,9 +131,7 @@ public class GopherJUi extends Application {
 	private void chooseDirectoryAction(Stage mainStage) {
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setTitle("Open Resource Directory");
-		// chooser.setInitialDirectory(new
-		// File(System.getProperty("user.home")));
-		chooser.setInitialDirectory(new File("C:\\Users\\csquill\\git\\GopherJ"));
+		chooser.setInitialDirectory(new File(System.getProperty("user.home")));
 		File fileSelected = chooser.showDialog(mainStage);
 		if (fileSelected == null)
 			return;
