@@ -6,34 +6,36 @@ import java.util.List;
 import cs622.generator.GopherJGenerator;
 
 /**
- * Abstract class used to represent a structured document that can be
- * predictively parsed in to Component's.
- * 
+ * Thread class to represent a single process parsing an input file.
  */
 public class DocumentThread extends Thread {
 
-	private String fileName;
+	private String fileName; // output Java class name
 
-	private String jsonFile;
+	private String jsonFile; // input file name
 
-	private List<String> results;
+	private List<String> results; // aggregated results
 
 	/**
 	 * Constructor
 	 */
 	public DocumentThread(String fileName, String jsonFile, List<String> results) {
-
 		this.fileName = fileName;
 		this.jsonFile = jsonFile;
 		this.results = results;
 	}
 
+	/**
+	 * Parses an input and generates Java source.
+	 */
 	public void run() {
 
 		try {
+			// assume JSON for now
 			Document doc = new JsonDocument();
 			doc.setJavaClassName(fileName);
 			doc.readInputFromFile(jsonFile);
+			// generate Java source text and add to the results
 			results.add(GopherJGenerator.getInstance(false).generate(doc));
 		} catch (IOException e) {
 			results.add("Error generating for file " + jsonFile);

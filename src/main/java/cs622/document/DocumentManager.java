@@ -17,9 +17,7 @@ import org.json.JSONObject;
 import cs622.generator.GopherJGenerator;
 
 /**
- * Abstract class used to represent a structured document that can be
- * predictively parsed in to Component's.
- * 
+ * Document manager class. Handles concurrent processing of input files.
  */
 public class DocumentManager {
 
@@ -30,8 +28,6 @@ public class DocumentManager {
 	 * Constructor
 	 */
 	public DocumentManager() {
-
-		// initialize a generator
 		generator = GopherJGenerator.getInstance(false);
 	}
 
