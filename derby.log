@@ -1,7 +1,7 @@
 ----------------------------------------------------------------
-Sat Jun 22 21:54:28 EDT 2019:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-016b-820a-b4cc-00001c91f2f0 
-on database directory C:\Users\csquill\git\GopherJ\derbyDB with class loader sun.misc.Launcher$AppClassLoader@28a418fc 
+Sat Jun 22 22:08:29 EDT 2019:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.11.1.2 - (1629631): instance a816c00e-016b-8217-8c5c-00001960a640 
+on database directory C:\Users\csquill\git\GopherJ\derbyDB with class loader sun.misc.Launcher$AppClassLoader@659e0bfd 
 Loaded from file:/C:/Users/csquill/git/GopherJ/derby_libs/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_161-b12
