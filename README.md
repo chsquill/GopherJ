@@ -12,9 +12,7 @@ Execute GopherJUi.java
 
 # Purpose
 
-GopherJ helps avoid the tedious task of creating boilerplate code manually. For example, programming against third party API’s has become common and it can be tedious to create the Java code structures that will map to the API’s output. The goal is to identify the structure of the input (JSON, XML) and parse it into a compilable Java code structure maintaining the inputs fields names, types and arrays. 
-
-A second use case is to generate JUnit test boilerplate code over an existing codebase of Java services. In this scenario it would find all public methods and create @Test methods per-public method.  
+GopherJ is based around generating boilerplate Java source files for predictable input. For example, programming against third party API’s has become common and can be tedious to create the Java code structures that map to an API’s output. Using structured input such as JSON and XML, GopherJ will generate the matching Java code. GopherJ provides both a command line interface as well as a GUI. The command line interactive menu prompts the user for an input file, generating output and writing the generated file to disk. The GUI provides an interface allowing users to use a file selector to pick a JSON input file and generate the output to the UI. Once displayed on the UI the user can copy the contents to the system clip-board or save the output to disk. An option to read previously stored files from disk and display them in the UI is available along with an audit trail written to a local database.  
 
 # Dependencies
 
